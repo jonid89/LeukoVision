@@ -26,6 +26,12 @@ checksum_verification_results.csv
 # Ignore all TIFF image data
 *.tiff
 
+# Ignore h5
+*.h5
+
+# Ignore PDF
+*.pdf
+
 # Ignore folders if needed
 BAS/
 EBO/

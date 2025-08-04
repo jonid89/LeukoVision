@@ -10,8 +10,8 @@ The third model was based on undersampling, in which we used the lowest populati
 
 # CNN Models (03.08.2025)
 
-After checking the result of over and undersampling (the best restult is from oversampling)
-we proceeded to constract models to predict the cells.
+After checking the result of over and undersampling (the best result is from oversampling)
+we proceeded to construct models to predict cell types.
  
  - First:
  we split the data to 70% training, 15% validation and 15% testinig using the the files train_val_test_split.ipynb
