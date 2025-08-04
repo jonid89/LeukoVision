@@ -7,7 +7,7 @@ The first model we used the full dataset (all images) and it is saved in h5 file
 In the second model we used the oversampling technique to ensure the even distribution of classes, this was done by selecting random images and rotating randomly between 1 and 359 degrees until the maximum number of images is reached.
 The third model was based on undersampling, in which we used the lowest population as a reference for the other classes.
 
-# CNN Models (03.08.2025)
+## CNN Models (03.08.2025)
 
 After checking the result of over and undersampling (the best result is from oversampling)
 we proceeded to construct models to predict cell types.
