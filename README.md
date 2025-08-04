@@ -1,4 +1,4 @@
-# Identifying different types WBCs from images
+# Image-Based Classification of White Blood Cell Types
 
 This project aims to build a deep learning model to identify different types of WBCs. 
 The data that use as a referance for our model is introduced in the following publication:
