@@ -13,12 +13,12 @@ After checking the result of over and undersampling (the best result is from ove
 we proceeded to construct models to predict cell types.
  
  - First:
- we split the data to 70% training, 15% validation and 15% testinig using the the files train_val_test_split.ipynb
+ we split the data to 70% training, 15% validation and 15% testinig using the the files `../src/train_val_test_split.ipynb`
 
- - Second
-In the new spilt folder (new_split), we used the file oversampling.ipynb to oversample the training set
+ - Second:
+In the new spilt folder, we used the file `oversampling.ipynb` to oversample the training set
 by randomaly rotating the the pictures between 1 and 359 degrees and ensuring that the new images have the same resolution.
 
-- Third
+- Third:
 We used pre trained models such as InceptionV3, VGG16 and ResNet50 to be trianed on the dataset
 the final result of the models is stored in the respective folder.
