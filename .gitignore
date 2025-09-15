@@ -33,7 +33,7 @@ checksum_verification_results.csv
 *.pth
 
 # Ignore PDF
-*.pdf
+# *.pdf
 
 # Ignore folders if needed
 BAS/
