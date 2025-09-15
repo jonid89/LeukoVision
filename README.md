@@ -1,4 +1,4 @@
-# LeukoVision: Image-Based Classification of White Blood Cell Types
+# LeukoVision: Identifying white blood cells from microscopic images
 
 This project aims to build a deep learning model to identify different types of WBCs. 
 The data that use as a referance for our model is introduced in the following publication:

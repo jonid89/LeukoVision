@@ -8,6 +8,7 @@ The procedure works as follows:
 - Oversampling continues until each class reaches the size of the largest class in the dataset.  
 
 This ensures a more balanced dataset, which helps improve model training and performance.  
+The oversampled dataset is avaliable at this link: https://www.kaggle.com/datasets/ahmedali42/spanish-dataset/data
 
 ## CNN Models
 
