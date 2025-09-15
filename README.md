@@ -1,4 +1,4 @@
-# Image-Based Classification of White Blood Cell Types
+# LeukoVision: Image-Based Classification of White Blood Cell Types
 
 This project aims to build a deep learning model to identify different types of WBCs. 
 The data that use as a referance for our model is introduced in the following publication:
@@ -13,8 +13,10 @@ The folder structure is as follow:
     root/ ->contains Readme, gitignore, requirements and all subfolders below
     |_src
     |_Notebooks
-        |_sampling_test
-        |_modeling_test
+    |   |_sampling_test
+    |   |_modeling -> Contains the notebooks that were used for training the models
+    |_Streamlit
+    |_Report
 
 ## How to use our models?
 

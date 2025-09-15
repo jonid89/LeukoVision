@@ -27,7 +27,10 @@ checksum_verification_results.csv
 *.tiff
 
 # Ignore h5
-# *.h5
+*.h5
+
+# Ignore pth
+*.pth
 
 # Ignore PDF
 *.pdf
