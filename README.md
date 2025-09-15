@@ -13,8 +13,9 @@ The folder structure is as follow:
     root/ ->contains Readme, gitignore, requirements and all subfolders below
     |_src
     |_Notebooks
-    |   |_sampling_test
-    |   |_modeling -> Contains the notebooks that were used for training the models
+    |   |_inceptionv3
+    |   |_resnet50
+    |   |_vgg16
     |_Streamlit
     |_Report
 
