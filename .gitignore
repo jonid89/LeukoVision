@@ -29,8 +29,11 @@ checksum_verification_results.csv
 # Ignore h5
 *.h5
 
+# Ignore pth
+*.pth
+
 # Ignore PDF
-*.pdf
+# *.pdf
 
 # Ignore folders if needed
 BAS/
