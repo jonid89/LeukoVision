@@ -24,16 +24,10 @@ Thumbs.db
 checksum_verification_results.csv
 
 # Ignore all TIFF image data
-*.tiff
-
-# Ignore h5
-*.h5
-
-# Ignore pth
-*.pth
+# *.tiff
 
 # Ignore PDF
-# *.pdf
+*.pdf
 
 # Ignore folders if needed
 BAS/

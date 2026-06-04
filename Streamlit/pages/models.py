@@ -186,7 +186,7 @@ elif section == "VGG16":
     """,unsafe_allow_html=True)
 
     # Insert image of Vgg16 architecture
-    st.image(white_bg('./pages/images/vgg16.png'), caption='Model architecture of VGG16',use_container_width=True)
+    st.image(white_bg('./Streamlit/pages/images/vgg16.png'), caption='Model architecture of VGG16',use_container_width=True)
 
     # Show model summary
     inputs=Input(shape=(None,None,3)) # Input layer
@@ -213,7 +213,7 @@ elif section == "VGG16":
 
     #Load the output of the training of the vgg16 model
     # Load the history of the model
-    with open('./history_model_unfrozen_noweights.pkl', 'rb') as f:
+    with open('./Streamlit/history_model_unfrozen_noweights.pkl', 'rb') as f:
         history_model = pickle.load(f)
 
     # Plot the loss/acc graphs
@@ -288,7 +288,7 @@ elif section == "VGG16":
         " model in classifying individual cell types. The most important finding is that all classes were predicted " \
         "at a rate of 97% or higher, which highlights the consistency of our model across all cell classes.", unsafe_allow_html=True)
 
-        st.image(white_bg('./pages/images/confusion_matrix.png'), caption='Confustion matrix of VGG16',use_container_width=True)
+        st.image(white_bg('./Streamlit/pages/images/confusion_matrix.png'), caption='Confustion matrix of VGG16',use_container_width=True)
 
 
     with st.expander("Classification report"):
