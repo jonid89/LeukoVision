@@ -23,26 +23,24 @@ def load_resnet():
     return torch.load('./Streamlit/resnet_model.pth', weights_only=False,map_location=torch.device('cpu'))
 def load_vgg16():
     return load_model('./Streamlit/vgg16_model.h5')
-inception_model = load_inception()
-resnet_model = load_resnet()
-vgg16_model = load_vgg16()
-
-# Remove DataParallel wrapper if exists
-for m in [inception_model, resnet_model]:
-    if isinstance(m, torch.nn.DataParallel):
-        m = m.module
-
-models = {
-    "InceptionV3": inception_model,
-    "ResNet50": resnet_model,
-    "VGG16": vgg16_model,
-}
 
 # --- Model Selection ---
-selected_model_name = st.selectbox("Choose a model", ["None"] + list(models.keys()))
+selected_model_name = st.selectbox("Choose a model", ["None", "InceptionV3", "ResNet50", "VGG16"])
 selected_model = None
 if selected_model_name != "None":
-    selected_model = models[selected_model_name]
+    with st.spinner(f"Loading {selected_model_name}..."):
+        if selected_model_name == "InceptionV3":
+            selected_model = load_inception()
+        elif selected_model_name == "ResNet50":
+            selected_model = load_resnet()
+        elif selected_model_name == "VGG16":
+            selected_model = load_vgg16()
+            
+        # Remove DataParallel wrapper if exists
+        if selected_model_name in ["InceptionV3", "ResNet50"]:
+            if isinstance(selected_model, torch.nn.DataParallel):
+                selected_model = selected_model.module
+                
     st.write(f"### You selected: {selected_model_name}")
 
 # --- Only proceed if a model is selected ---
