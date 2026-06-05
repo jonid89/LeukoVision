@@ -50,14 +50,14 @@ if selected_model:
 
     # --- Gallery ---
     gallery = {
-        "BAS": ['./Streamlit/gallary/BA_580.jpg','./Streamlit/gallary/BA_19779.jpg','./Streamlit/gallary/BA_20201.jpg'],
-        "EOS": ['./Streamlit/gallary/EO_29763.jpg','./Streamlit/gallary/EO_24568.jpg','./Streamlit/gallary/EO_25085.jpg'],
-        "EBO": ['./Streamlit/gallary/ERB_168152.jpg','./Streamlit/gallary/ERB_170062.jpg','./Streamlit/gallary/ERB_174098.jpg'],
-        "IG": ["./Streamlit/gallary/PMY_901117.jpg",'./Streamlit/gallary/MMY_630078.jpg','./Streamlit/gallary/MY_318125.jpg'],
-        "LYT": ["./Streamlit/gallary/LY_742481.jpg",'./Streamlit/gallary/LY_731097.jpg','./Streamlit/gallary/LY_743393.jpg'],
-        "MON": ["./Streamlit/gallary/MO_849518.jpg",'./Streamlit/gallary/MO_888999.jpg','./Streamlit/gallary/MO_912563.jpg'],
-        "NGS": ["./Streamlit/gallary/SNE_746083.jpg",'./Streamlit/gallary/BNE_378921.jpg','./Streamlit/gallary/SNE_790562.jpg'],
-        "PLA": ["./Streamlit/gallary/PLATELET_969782.jpg",'./Streamlit/gallary/PLATELET_37710.jpg','./Streamlit/gallary/PLATELET_815342.jpg']
+        "BAS": ['BA_580.jpg', 'BA_19779.jpg', 'BA_20201.jpg'],
+        "EOS": ['EO_29763.jpg', 'EO_24568.jpg', 'EO_25085.jpg'],
+        "EBO": ['ERB_168152.jpg', 'ERB_170062.jpg', 'ERB_174098.jpg'],
+        "IG": ['PMY_901117.jpg', 'MMY_630078.jpg', 'MY_318125.jpg'],
+        "LYT": ['LY_742481.jpg', 'LY_731097.jpg', 'LY_743393.jpg'],
+        "MON": ['MO_849518.jpg', 'MO_888999.jpg', 'MO_912563.jpg'],
+        "NGS": ['SNE_746083.jpg', 'BNE_378921.jpg', 'SNE_790562.jpg'],
+        "PLA": ['PLATELET_969782.jpg', 'PLATELET_37710.jpg', 'PLATELET_815342.jpg']
     }
 
     # --- Class Selection ---
@@ -65,22 +65,24 @@ if selected_model:
 
     # --- Decide which images to show ---
     labels, paths = [], []
+    base_dir = './Streamlit/gallery/'
     if class_choice == "All":
         for label, imgs in gallery.items():
-            for img_path in imgs:
+            for img_name in imgs:
                 labels.append(label)
-                paths.append(img_path)
+                paths.append(f"{base_dir}{img_name}")
     else:
-        for img_path in gallery[class_choice]:
+        for img_name in gallery[class_choice]:
             labels.append(class_choice)
-            paths.append(img_path)
+            paths.append(f"{base_dir}{img_name}")
 
     # --- Show images in gallery expander ---
     selected_gallery = None
     with st.expander("Show Gallery", expanded=False):
+        loaded_images = [Image.open(p) for p in paths]
         selected_gallery = image_select(
             label=f"Choose from {class_choice} gallery",
-            images=paths,
+            images=loaded_images,
             captions=labels,
             use_container_width=False
         )
@@ -95,8 +97,8 @@ if selected_model:
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert("RGB").resize((299, 299))
     elif selected_gallery is not None:
-        image = Image.open(selected_gallery).convert("RGB").resize((299, 299))
-        #st.success(f"You selected: {selected_gallery}")
+        # selected_gallery is now already a PIL Image object
+        image = selected_gallery.convert("RGB").resize((299, 299))
 
     # --- Image Prediction and Display ---
     if image:
