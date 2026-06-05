@@ -5,50 +5,59 @@ import tensorflow as tf
 from PIL import Image
 
 def make_gradcam_heatmap(img_tensor, model, target_layer_name, pred_index=None):   
-    # Skip forward to get target layer predictions and activations
-    def forward_hook(module, input, output):
-        model.features = output
+    """
+    Generates a Grad-CAM heatmap for a PyTorch model using hooks.
+    """
+    # We'll store the gradients and activations in these variables
+    gradients = None
+    activations = None
 
-    # Register a hook on the target layer to retrieve its outputs
-    hook = model._modules.get(target_layer_name).register_forward_hook(forward_hook)
+    def backward_hook(module, grad_input, grad_output):
+        nonlocal gradients
+        gradients = grad_output[0]
+
+    def forward_hook(module, input, output):
+        nonlocal activations
+        activations = output
+
+    target_layer = dict(model.named_modules())[target_layer_name]
     
-    # Perform a forward pass to obtain model outputs
+    forward_handle = target_layer.register_forward_hook(forward_hook)
+    backward_handle = target_layer.register_full_backward_hook(backward_handle)
+
+    # 1. Forward pass to get model output
     output = model(img_tensor)
-    
-    # Remove hook after getting activations
-    hook.remove()
 
     # If no prediction index is provided, use the one with the highest probability
     if pred_index is None:
         pred_index = output.argmax(dim=1).item()
     
-    # Class probability value
-    y = output[0, pred_index]
-    
-    # Skip backwards to get the gradients of the target layer
-    model.zero_grad() # Reset gradients
-    model.features.retain_grad() # Keep target layer gradients
-    y.backward(retain_graph=True) # Calculate gradients by backpropagation
+    # 2. Backward pass to get gradients
+    model.zero_grad()
+    output[0, pred_index].backward()
 
-    # Get target layer gradients and activations
-    gradients = model.features.grad[0]
-    activations = model.features[0]
+    # Remove hooks after use
+    forward_handle.remove()
+    backward_handle.remove()
 
-    # Apply average global pooling on gradients
-    pooled_grads = torch.mean(gradients, dim=[1, 2])
+    # 3. Pool gradients and compute heatmap
+    pooled_grads = torch.mean(gradients, dim=[0, 2, 3])
 
-    # Weight activations by gradients
-    for i in range(len(pooled_grads)):
-        activations[i, :, :] *= pooled_grads[i]
+    # Weight the channels of the activation map
+    for i in range(activations.shape[1]):
+        activations[:, i, :, :] *= pooled_grads[i]
 
-    # Calculate the heatmap
-    heatmap = torch.mean(activations, dim=0).detach().numpy()
-    heatmap = np.maximum(heatmap, 0) # Keep only positive values
-    heatmap /= np.max(heatmap) # Normalize the heatmap
+    heatmap = torch.mean(activations, dim=1).squeeze().detach().numpy()
+    heatmap = np.maximum(heatmap, 0)
+    if np.max(heatmap) > 0:
+        heatmap /= np.max(heatmap)
 
     return heatmap, pred_index
 
 def make_gradcam_heatmap_keras(img_array, model, last_conv_layer_name='block5_conv3', pred_index=None):
+    """
+    Generates a Grad-CAM heatmap for a Keras/TensorFlow model.
+    """
     # build a model that maps inputs -> (last_conv_output, model_output)
     last_conv_layer = model.get_layer(last_conv_layer_name)
     grad_model = tf.keras.models.Model(model.inputs, [last_conv_layer.output, model.output])
@@ -57,7 +66,7 @@ def make_gradcam_heatmap_keras(img_array, model, last_conv_layer_name='block5_co
         conv_outputs, predictions = grad_model(img_array)
         if pred_index is None:
             pred_index = tf.argmax(predictions[0])
-        class_channel = predictions[0][:, pred_index]
+        class_channel = predictions[:, pred_index]
 
     # gradients of the target class w.r.t. conv feature maps
     grads = tape.gradient(class_channel, conv_outputs)  # shape: (1, H, W, C)
