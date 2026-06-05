@@ -23,7 +23,7 @@ def make_gradcam_heatmap(img_tensor, model, target_layer_name, pred_index=None):
     target_layer = dict(model.named_modules())[target_layer_name]
     
     forward_handle = target_layer.register_forward_hook(forward_hook)
-    backward_handle = target_layer.register_full_backward_hook(backward_handle)
+    backward_handle = target_layer.register_full_backward_hook(backward_hook)
 
     # 1. Forward pass to get model output
     output = model(img_tensor)
